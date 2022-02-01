@@ -1,17 +1,3 @@
-/* Temp workarounds for transition issues on page navigation*/
-* {
-    transition: none !important;
-}
-
-.tile.card-panel.switch.clickable .waves-ripple {
-    display: none;
-}
-
-/* Remove background from Dimmer custom tile*/
-div[data-v-821c8568] {
-    background-color: transparent !important;
-}
-
 /* Default light switch customization */
 .tile.card-panel.switch.clickable {
     background-color: transparent !important;    
@@ -41,4 +27,18 @@ div[data-v-821c8568] {
 
 .tile.active.card-panel.switch.clickable .main-content {
     background-color: #ddc44070;
+}
+
+.tile.card-panel.switch.clickable .waves-ripple {
+    display: none;
+}
+
+/* Remove background from Dimmer custom tile*/
+div[data-v-821c8568] {
+    background-color: transparent !important;
+}
+
+/* Temp workaround for transition issues on page navigation*/
+* {
+    transition: none !important;
 }
