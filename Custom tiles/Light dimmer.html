@@ -37,20 +37,20 @@
         padding-top: 10px;
     }
     .slider-wrapper {
-        width: 90px;
-        height: 210px;
-          border-radius: 8px;
+        width: 70%;
+        height: 80%;
+        border-radius: 8px;
     }
     .noUi-target {
         background-color: rgb(255 255 255 / 30%);
         border: 0;
         box-shadow: none;
         backdrop-filter: blur(8px);
-          border-radius: 8px;
+        border-radius: 8px;
     }
     .noUi-connect {
         background: rgb(255 255 255 / 30%);
-          border-radius: 8px;
+        border-radius: 8px;
     }
     .noUi-handle {
         opacity: 0;
@@ -72,12 +72,12 @@
     var deviceId = null;
     var devices = [];
     var baseUrl = "https://api.smartthings.com/v1/devices";
-    
-    function addEvents() {
-        var slider = document.querySelector(".slider-wrapper");    
+
+    function initSlider() {
+        slider = document.querySelector(".slider-wrapper");
         noUiSlider.create(slider, {
-            start: 50,
-              connect: "lower",
+            start: 0,
+            connect: "lower",
             direction: 'rtl',
             orientation: 'vertical',
             range: {
@@ -87,10 +87,36 @@
         });  
         slider.noUiSlider.on('change', function () {  
             var value = slider.noUiSlider.get();
-              console.log(value);
-              executeCommand(deviceId, value);
+              console.log("Slider changed to: " + value);
+              setDimLevel(deviceId, value);
         });
     }
+
+    function setSlider(val) {
+        slider = document.querySelector(".slider-wrapper");
+        slider.noUiSlider.set(val);
+    }
+
+    function getDimLevel() {
+        var dimLevel;
+        axios.get(baseUrl + '/' + deviceId + '/status', getAxiosConfig()).then(function(response) {
+            console.log('Response Status', response.status); 
+            dimLevel = response.data.components.main.switchLevel.level.value;
+            setSlider(dimLevel);
+        });
+    }
+     
+    function setDimLevel(deviceId, value) {
+        var data = `{"commands": [{
+                "component": "main",
+                "capability": "switchLevel",
+                "command": "setLevel",
+                "arguments": [` + value + `]
+            }]}`;
+        axios.post(baseUrl + '/' + deviceId + '/commands', data, getAxiosConfig()).then(function(response) {
+            console.log('Response Status', response.status);
+        });
+    } 
     
     function getAxiosConfig(){
         return { "headers": { "Authorization": "Bearer " + patToken } }
@@ -106,22 +132,15 @@
         else{
             patToken = data.settings.token;
             deviceId = data.settings.LightID;
-        }    
-        // to do: get current dim level
-        addEvents();
-    });
+        }
+
+        initSlider();
+        getDimLevel();
+ 
+    });    
+
     
-    function executeCommand(deviceId, value) {
-        var data = `{"commands": [{
-                "component": "main",
-                "capability": "switchLevel",
-                "command": "setLevel",
-                "arguments": [` + value + `]
-            }]}`;
-        axios.post(baseUrl + '/' + deviceId + '/commands', data, getAxiosConfig()).then(function(response) {
-            console.log('Response Status', response.status);
-        });
-    }   
+     
     </script>
     
     <!-- HTML -->

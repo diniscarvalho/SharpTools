@@ -1,0 +1,72 @@
+    <!-- Styles -->
+    <style>
+    .main-content {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        padding-top: 10px;
+    }
+    .dca-menu {
+        width: 90px;
+        height: 210px;
+        border-radius: 8px;
+    }
+    .dca-menu-item {
+        width: 90px;
+        height: 210px;
+        border-radius: 8px;
+    }
+    
+    </style>
+    
+    <!-- Scripts -->
+    <script src="https://cdn.sharptools.io/js/custom-tiles.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
+    <script>
+    var content = document.getElementById("mainContent");
+    var patToken = null;
+    var deviceId = null;
+    var devices = [];
+    var baseUrl = "https://api.smartthings.com/v1/devices";
+    
+    function initMenu() {
+        // set active menu item
+    }
+    
+    function getAxiosConfig(){
+        return { "headers": { "Authorization": "Bearer " + patToken } }
+    }
+        
+    stio.ready((data)=>{
+        // update correct settings and call init with active menu
+        console.log("stio library is ready with token", data.settings.token);
+        console.log("device ID token", data.settings.LightID);
+        if(data.settings.token == null || data.settings.LightID == null){
+            console.log("Tile not configured properly");
+            return;
+        }
+        else{
+            patToken = data.settings.token;
+            deviceId = data.settings.LightID;
+        } 
+        initMenu();
+    });    
+    
+    </script>
+    
+    <!-- HTML -->
+    <div class="main-content" id="mainContent">
+        <div class="dca-menu">
+            <div class="dca-menu-item active">
+                <p align="center"> <img src="https://raw.githubusercontent.com/tailwindlabs/heroicons/master/.github/logo.svg" alt="Heroicons"> </p>
+                <p>Vista geral</p>
+            <div class="dca-menu-item">Luzes</div>
+            <div class="dca-menu-item">Alarme</div>
+            <div class="dca-menu-item">Dispositivos</div>
+        </div>
+    </div>
