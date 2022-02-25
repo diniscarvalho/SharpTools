@@ -86,7 +86,7 @@
             }
         });  
         slider.noUiSlider.on('change', function () {  
-            var value = slider.noUiSlider.get();
+            var value = parseInt(slider.noUiSlider.get());
               console.log("Slider changed to: " + value);
               setDimLevel(deviceId, value);
         });
@@ -107,12 +107,7 @@
     }
      
     function setDimLevel(deviceId, value) {
-        var data = `{"commands": [{
-                "component": "main",
-                "capability": "switchLevel",
-                "command": "setLevel",
-                "arguments": [` + value + `]
-            }]}`;
+        var data = '{"commands": [{"component": "main", "capability": "switchLevel", "command": "setLevel", "arguments": ['+value+']}]}';
         axios.post(baseUrl + '/' + deviceId + '/commands', data, getAxiosConfig()).then(function(response) {
             console.log('Response Status', response.status);
         });
