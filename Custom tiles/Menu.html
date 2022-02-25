@@ -1,5 +1,16 @@
+    <!-- Do not edit below -->
+<script type="application/json" id="tile-settings">
+    {
+      "schema": "0.1.0",
+      "settings": [
+        {"name": "ActiveElement", "label": "Active element", "type": "NUMBER"}
+      ],
+      "name": "Menu [shortyyy]"
+    }
+    </script>
+    <!-- Do not edit above -->
     <!-- Styles -->
-    <style>
+    <style>    
     .main-content {
         display: flex;
         align-items: center;
@@ -9,18 +20,28 @@
         left: 0;
         width: 100%;
         height: 100%;
-        padding-top: 10px;
     }
     .dca-menu {
-        width: 90px;
-        height: 210px;
-        border-radius: 8px;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: stretch;
     }
     .dca-menu-item {
-        width: 90px;
-        height: 210px;
-        border-radius: 8px;
+        flex: 1;
+        display: flex;
+        background-color: rgba(0,0,0, 0.2);
+        width: 100%;
     }
+    .dca-menu-item:not(:last-child) {
+        margin-bottom: 10px;
+    }
+    .dca-menu-item img{
+        width: 32px;
+        height: 32px;
+        color: #fff !important;
+    }   
     
     </style>
     
@@ -63,10 +84,16 @@
     <div class="main-content" id="mainContent">
         <div class="dca-menu">
             <div class="dca-menu-item active">
-                <p align="center"> <img src="https://raw.githubusercontent.com/tailwindlabs/heroicons/master/.github/logo.svg" alt="Heroicons"> </p>
-                <p>Vista geral</p>
-            <div class="dca-menu-item">Luzes</div>
-            <div class="dca-menu-item">Alarme</div>
-            <div class="dca-menu-item">Dispositivos</div>
+                <img src="https://cdn.jsdelivr.net/npm/heroicons@1.0.5/outline/home.svg"><p>Vista geral</p>
+            </div>
+            <div class="dca-menu-item">
+                <img src="https://cdn.jsdelivr.net/npm/heroicons@1.0.5/outline/light-bulb.svg"><p>Luzes</p>
+            </div>
+            <div class="dca-menu-item">
+                <img src="https://cdn.jsdelivr.net/npm/heroicons@1.0.5/outline/lock-closed.svg"><p>Alarme</p>
+            </div>
+            <div class="dca-menu-item">
+                <img src="https://cdn.jsdelivr.net/npm/heroicons@1.0.5/outline/view-grid.svg"><p>Dispositivos</p>
+            </div>
         </div>
     </div>
