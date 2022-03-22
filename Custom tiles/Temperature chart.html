@@ -1,12 +1,23 @@
-    <!-- Do not edit below -->
-<script type="application/json" id="tile-settings">
-    {
-      "schema": "0.1.0",
-      "settings": [
-        {"name": "ActiveElement", "label": "Active element", "type": "NUMBER"}
-      ],
-      "name": "Menu [shortyyy]"
-    }
+<!-- 
+  README
+  Create a SmartThings 'Personal Access Token' with access to devices and use it
+  for the 'token' setting in the tile.
+
+  https://account.smartthings.com/tokens
+
+  Light dimmer created by Dinis Carvalho, inspired by Joshua's scenes tile:
+  https://github.com/joshualyon/custom-tile-demos/tree/main/smartthings-scenes/
+-->
+<!-- Do not edit below -->
+    <script type="application/json" id="tile-settings">
+        {
+        "schema": "0.1.0",
+        "settings": [
+            {"name": "token", "label": "Token", "type": "STRING"},
+            {"name": "DeviceID", "label": "Device ID", "type": "STRING"}
+        ],
+        "name": "Temperature chart [shortyyy]"
+        }
     </script>
     <!-- Do not edit above -->
     <!-- Styles -->
@@ -55,8 +66,8 @@
     var devices = [];
     var baseUrl = "https://api.smartthings.com/v1/devices";
     
-    function initMenu() {
-        // set active menu item
+    function init() {
+        // build chart
     }
     
     function getAxiosConfig(){
@@ -65,35 +76,24 @@
         
     stio.ready((data)=>{
         // update correct settings and call init with active menu
+        console.log("Starting Temperature Chart [shortyyy]");
         console.log("stio library is ready with token", data.settings.token);
         console.log("device ID token", data.settings.LightID);
         if(data.settings.token == null || data.settings.LightID == null){
             console.log("Tile not configured properly");
             return;
         }
-        else{
+        else {
             patToken = data.settings.token;
             deviceId = data.settings.LightID;
         } 
-        initMenu();
+        init();
     });    
     
     </script>
     
     <!-- HTML -->
     <div class="main-content" id="mainContent">
-        <div class="dca-menu">
-            <div class="dca-menu-item active">
-                <img src="https://cdn.jsdelivr.net/npm/heroicons@1.0.5/outline/home.svg"><p>Vista geral</p>
-            </div>
-            <div class="dca-menu-item">
-                <img src="https://cdn.jsdelivr.net/npm/heroicons@1.0.5/outline/light-bulb.svg"><p>Luzes</p>
-            </div>
-            <div class="dca-menu-item">
-                <img src="https://cdn.jsdelivr.net/npm/heroicons@1.0.5/outline/lock-closed.svg"><p>Alarme</p>
-            </div>
-            <div class="dca-menu-item">
-                <img src="https://cdn.jsdelivr.net/npm/heroicons@1.0.5/outline/view-grid.svg"><p>Dispositivos</p>
-            </div>
+        <div class="dca-temp-chart">
         </div>
     </div>
