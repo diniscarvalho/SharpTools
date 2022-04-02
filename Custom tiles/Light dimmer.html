@@ -2,10 +2,8 @@
 README
 Create a SmartThings 'Personal Access Token' with access to devices and use it
 for the 'token' setting in the tile.
-https://account.smartthings.com/tokens
 
-To configure the correct device, open the SmartThings IDE, browse devices and copy
-the ID and use it for the 'Device ID' setting in the tile.
+https://account.smartthings.com/tokens
 
 Light dimmer created by Dinis Carvalho, inspired by Joshua's scenes tile:
 https://github.com/joshualyon/custom-tile-demos/tree/main/smartthings-scenes/
@@ -14,19 +12,23 @@ https://github.com/joshualyon/custom-tile-demos/tree/main/smartthings-scenes/
 <!-- Do not edit below -->
 <script type="application/json" id="tile-settings">
     {
-    "schema": "0.1.0",
-    "settings": [
-        {"name": "token", "label": "Token", "type": "STRING"},
-        {"name": "DeviceID", "label": "Device ID", "type": "STRING"}
-    ],
-    "name": "Light dimmer [shortyyy]"
+      "schema": "0.1.0",
+      "settings": [
+        {"type": "STRING", "label": "Token", "name": "token"},
+        {"name": "DeviceID1", "label": "Device ID 1", "type": "STRING"},
+        {"name": "DeviceID2", "label": "Device ID 2", "type": "STRING"},
+        {"name": "DeviceID3", "label": "Device ID 3", "type": "STRING"},
+        {"name": "DeviceID4", "label": "Device ID 4", "type": "STRING"},
+        {"name": "DeviceID5", "label": "Device ID 5", "type": "STRING"}
+      ],
+      "name": "Light dimmer [shortyyy]"
     }
-</script>
-<!-- Do not edit above -->
-
-<!-- Styles -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.5.1/nouislider.css" integrity="sha512-MKxcSu/LDtbIYHBNAWUQwfB3iVoG9xeMCm32QV5hZ/9lFaQZJVaXfz9aFa0IZExWzCpm7OWvp9zq9gVip/nLMg==" crossorigin="anonymous" referrerpolicy="no-referrer">
-<style>
+    </script>
+    <!-- Do not edit above -->
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.5.1/nouislider.css" integrity="sha512-MKxcSu/LDtbIYHBNAWUQwfB3iVoG9xeMCm32QV5hZ/9lFaQZJVaXfz9aFa0IZExWzCpm7OWvp9zq9gVip/nLMg==" crossorigin="anonymous" referrerpolicy="no-referrer">
+    <style>
     .main-content {
         display: flex;
         align-items: center;
@@ -61,19 +63,19 @@ https://github.com/joshualyon/custom-tile-demos/tree/main/smartthings-scenes/
         margin: 0 !important;
         right: 0 !important;
     }
-</style>
-
-<!-- Scripts -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.5.1/nouislider.min.js" integrity="sha512-T5Bneq9hePRO8JR0S/0lQ7gdW+ceLThvC80UjwkMRz+8q+4DARVZ4dqKoyENC7FcYresjfJ6ubaOgIE35irf4w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<script src="https://cdn.sharptools.io/js/custom-tiles.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
-<script>
+    
+    </style>
+    
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.5.1/nouislider.min.js" integrity="sha512-T5Bneq9hePRO8JR0S/0lQ7gdW+ceLThvC80UjwkMRz+8q+4DARVZ4dqKoyENC7FcYresjfJ6ubaOgIE35irf4w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdn.sharptools.io/js/custom-tiles.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
+    <script>
     var content = document.getElementById("mainContent");
     var patToken = null;
-    var deviceId = null;
     var devices = [];
     var baseUrl = "https://api.smartthings.com/v1/devices";
-
+    
     function initSlider() {
         slider = document.querySelector(".slider-wrapper");
         noUiSlider.create(slider, {
@@ -89,57 +91,66 @@ https://github.com/joshualyon/custom-tile-demos/tree/main/smartthings-scenes/
         slider.noUiSlider.on('change', function () {  
             var value = parseInt(slider.noUiSlider.get());
                 console.log("Slider changed to: " + value);
-                setDimLevel(deviceId, value);
+                setDimLevel(value);
         });
     }
-
+    
     function setSlider(val) {
         slider = document.querySelector(".slider-wrapper");
         slider.noUiSlider.set(val);
     }
-
+    
     function getDimLevel() {
-        var dimLevel;
-        axios.get(baseUrl + '/' + deviceId + '/status', getAxiosConfig()).then(function(response) {
+        var dimLevel = 0;        
+        axios.get(baseUrl + '/' + devices[0] + '/status', getAxiosConfig()).then(function(response) {
             console.log('Get dim level response status', response.status);
             if(response.data.components.main.switchLevel !== undefined) {
                 dimLevel = response.data.components.main.switchLevel.level.value;
                 setSlider(dimLevel);
-            }        
-        });
+            }
+        });        
     }
         
-    function setDimLevel(deviceId, value) {
+    function setDimLevel(value) {
         var data = '{"commands": [{"component": "main", "capability": "switchLevel", "command": "setLevel", "arguments": ['+value+']}]}';
-        axios.post(baseUrl + '/' + deviceId + '/commands', data, getAxiosConfig()).then(function(response) {
-            console.log('Set dim level response status', response.status);
-        });
+        for(var i=0; i<devices.length; i++) {
+            axios.post(baseUrl + '/' + devices[i] + '/commands', data, getAxiosConfig()).then(function(response) {
+                console.log('Set dim level response status', response.status);
+            });
+        }
     } 
-
+    
     function getAxiosConfig(){
         return { "headers": { "Authorization": "Bearer " + patToken } }
     }
         
     stio.ready((data)=>{
         console.log("Starting Light Dimmer [shortyyy]");
-        console.log("stio library is ready with token", data.settings.token);
-        console.log("device ID token", data.settings.DeviceID);
-        if(data.settings.token == null || data.settings.DeviceID == null){
-            console.log("Tile not configured properly");
+        console.log("stio library is ready with token", data.settings.token);        
+        if(data.settings.token == null || data.settings.DeviceID1 == null){
+            console.log("Please configure the authorization token and at least 1 device");
             return;
         }
-        else{
+        else{            
             patToken = data.settings.token;
-            deviceId = data.settings.DeviceID;
+            for(var i=1; i<=5; i++) {
+                if(data.settings["DeviceID"+i] !== null) {
+                    devices.push(data.settings["DeviceID"+i]);
+                }
+            }
+            console.log("device IDs", devices);
         }
-
+    
         initSlider();
         getDimLevel();
         setInterval(getDimLevel, 30000);
-    });    
-</script>
-
-<!-- HTML -->
-<div class="main-content" id="mainContent">
-    <div class="slider-wrapper"></div>
-</div>
+    });
+    
+    
+        
+    </script>
+    
+    <!-- HTML -->
+    <div class="main-content" id="mainContent">
+        <div class="slider-wrapper"></div>
+    </div>
