@@ -33,12 +33,7 @@
     display: none;
 }
 
-/* Remove background from Dimmer custom tile*/
-div[data-v-821c8568] {
-    background-color: transparent !important;
-}
-
 /* Temp workaround for transition issues on page navigation*/
-* {
+.card-panel {
     transition: none !important;
 }
